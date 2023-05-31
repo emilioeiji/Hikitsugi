@@ -10,7 +10,29 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <title>Hikitsugi</title>
+    <script src="js/sql-wasm.js"></script>
 </head>
+
+<script>
+    const loadDB = async () => {
+        const response = await fetch('hikitsugi.sqlite');
+        const buffer = await response.arrayBuffer();
+        const sql = await initSqlJs({
+            locateFile: () => 'js/sql-wasm.wasm' // Caminho para o arquivo sql-wasm.wasm
+        });
+        const db = new sql.Database(new Uint8Array(buffer));
+
+        // Executar consultas
+        const consulta = 'SELECT * FROM tb_gl';
+        const resultados = db.exec(consulta);
+
+        // Manipular os resultados
+        console.log(resultados);
+    };
+
+    loadDB();
+</script>
+
 
 <body>
     <div>
